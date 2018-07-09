@@ -77,6 +77,9 @@ extension WebViewBridgeViewController : WKScriptMessageHandler {
         print("message.name:\(message.name)")
         if message.name == Constants.callBackHandlerKey {
             print("message.body:\(message.body)")
+            
+            // popup!
+            self.webView.stringByEvaluatingJavaScript(script: "javascript:test01();")
         }
     }
 }

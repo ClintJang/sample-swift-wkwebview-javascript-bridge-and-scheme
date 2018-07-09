@@ -164,6 +164,9 @@ extension WebViewSchemesViewController : WKNavigationDelegate {
             print("urlHost:\(urlHost)")
 
             decisionHandler(.cancel)
+            
+            // popup!
+            self.webView.stringByEvaluatingJavaScript(script: "javascript:test02();")
             return
         }
         decisionHandler(.allow)
