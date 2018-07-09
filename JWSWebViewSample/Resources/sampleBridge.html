@@ -1,0 +1,35 @@
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<script type="text/javascript">
+   // alert(1)
+   
+   function callNative01() {
+       try {
+           webkit.messageHandlers.callbackHandler.postMessage("callNative01");
+       } catch(error) {
+           alert(error)
+       }
+   }
+
+    function callNative02() {
+        try {
+            webkit.messageHandlers.callbackHandler.postMessage({key01:'testValue01', key02:'testValue02'});
+        } catch(error) {
+            alert(error)
+        }
+    }
+   
+   function test01() {
+       alert('test01');
+   }
+</script>
+<body>
+    <h1> <a href="javascript:test01();">Test Click</a> </h1> <br /><br />
+    <h1> <a href="javascript:callNative01();">CallNative 01 Click</a> </h1> <br /><br />
+    <h1> <a href="javascript:callNative02();">CallNative 02 Click</a> </h1> <br /><br />
+<h1> This is a sample file created to test a simple "WebView".<br /></h1>
+<h1> Modify this file to test the "WebView" content.<br /></h1>
+</body>
+</html>
