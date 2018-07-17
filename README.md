@@ -49,11 +49,68 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
     </body>
     </html>
     ```
-- [WebViewBridgeViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Sample/Bridge/WebViewBridgeViewController.swift)
+- swift code 처리 부분 : [WebViewBridgeViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Sample/Bridge/WebViewBridgeViewController.swift) ← 자세한것은 클릭해서 코드를 보세요.
+    ```swift 
+    .. (중략).. 
+
+    private struct Constants {
+        static let callBackHandlerKey = "callbackHandler"
+    }
+
+    .. (중략).. 
+
+    func setupView() {
+        // Bridge Setting
+        let userController: WKUserContentController = WKUserContentController()
+        let userScript: WKUserScript = WKUserScript(source: "test01()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+        userController.addUserScript(userScript)
+        
+        userController.add(self, name: Constants.callBackHandlerKey)
+        let configuration = WKWebViewConfiguration()
+        configuration.userContentController = userController
+        
+        // Default WebView Setting
+        self.webView = WKWebView(frame:self.safeAreaContainerView.bounds, configuration: configuration)
+        self.webView.navigationDelegate = self
+        self.webView.uiDelegate = self
+        self.webView.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.safeAreaContainerView.addSubview(self.webView)
+        
+        // WKWebView Layout Setting
+        // Constraints like "UIWebView" are set.
+        // This is a sample. If you are developing, use a library called "SnapKit".
+        // https://github.com/SnapKit/SnapKit
+        let margins = safeAreaContainerView.layoutMarginsGuide
+        webView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        webView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        webView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+    }
+
+    .. (중략) ..
+
+    // MARK: - WKScriptMessageHandler
+    extension WebViewBridgeViewController : WKScriptMessageHandler {
+        //MARK:- HERE!!!
+        func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+            print("message.name:\(message.name)")
+            if message.name == Constants.callBackHandlerKey {
+                print("message.body:\(message.body)")
+                
+                // popup!
+                self.webView.stringByEvaluatingJavaScript(script: "javascript:test01();")
+            }
+        }
+    }
+
+    .. (중략) ..
+
+    ```
 
 ## 2. URL의 Scheme를 이용해서 처리하는 방식
 
-- [sampleScheme.html](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Resources/sampleScheme.html)
+- 테스트를 위한 HTML 파일 : [sampleScheme.html](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Resources/sampleScheme.html)
     ```html 
     <html lang="ko">
     <head>
@@ -81,4 +138,70 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
     </html>
     ```
 
-- [WebViewSchemesViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Sample/Scheme/WebViewSchemesViewController.swift)
+- swift code 처리 부분 : [WebViewSchemesViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Sample/Scheme/WebViewSchemesViewController.swift) ← 자세한것은 클릭해서 코드를 보세요.
+    ``` swift 
+    .. (중략) ..
+
+    private struct Constants {
+        static let schemeKey = "nativeScheme"
+    }
+
+    .. (중략) ..
+
+    func setupView() {
+        let preferences = WKPreferences()
+        preferences.javaScriptEnabled = true // default YES.
+        preferences.javaScriptCanOpenWindowsAutomatically = true
+        
+        let configuration = WKWebViewConfiguration()
+        configuration.preferences = preferences
+        
+        self.webView = WKWebView(frame: self.view.bounds, configuration: configuration)
+        self.webView.navigationDelegate = self
+        self.webView.uiDelegate = self
+        self.webView.translatesAutoresizingMaskIntoConstraints = false
+        self.safeAreaContainerView.addSubview(self.webView)
+        
+        // WKWebView Layout Setting
+        // Constraints like "UIWebView" are set.
+        // This is a sample. If you are developing, use a library called "SnapKit".
+        // https://github.com/SnapKit/SnapKit
+        let margins = safeAreaContainerView.layoutMarginsGuide
+        webView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        webView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        webView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+    }
+
+    .. (중략) ..
+    
+    // MARK: - WKNavigationDelegate
+    extension WebViewSchemesViewController : WKNavigationDelegate {
+
+    .. (중략) ..
+
+    //MARK:- HERE!!!
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        print("\(#function)")
+        
+        // WebView Native 연동 여부 확인
+        if let url = navigationAction.request.url,
+            let urlScheme = url.scheme,
+            let urlHost = url.host,
+            urlScheme.uppercased() == Constants.schemeKey.uppercased() {
+            print("url:\(url)")
+            print("urlScheme:\(urlScheme), Lower case.") // 소문자입니다.
+            print("urlHost:\(urlHost)")
+
+            decisionHandler(.cancel)
+            
+            // popup!
+            self.webView.stringByEvaluatingJavaScript(script: "javascript:test02();")
+            return
+        }
+        decisionHandler(.allow)
+    }
+
+    .. (중략) ..
+
+    ```
