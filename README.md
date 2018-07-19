@@ -17,7 +17,7 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
 
 # 설명
 ## 결과 이미지
-<img width="268" height="480" src="/ImageresultLow.gif">
+<img width="268" height="480" src="/Image/resultLow.gif">
 
 ## 1. javascirpt bridge 방식
 > 브릿지 연결을 이용한 것과 정의된 url의 스킴을 이용한 웹에서 네이티브로 콜백을 주는 구분이 있습니다. 
