@@ -1,6 +1,6 @@
 # sample swift wkwebview javascript bridge and scheme
 [![License](http://img.shields.io/badge/License-MIT-green.svg?style=flat)](https://github.com/clintjang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/LICENSE) [![Swift 4](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://swift.org) 
-
+- [README-en.md](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/README-en.md) : English information
 ```
 WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플링했습니다.
 
@@ -15,7 +15,7 @@ WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 �
 아래는 그 기능들에 대한 셈플링을 해봤습니다. 
 ```
 
-- [README-en.md](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/README-en.md)
+
 
 # 설명
 ## 결과 이미지 (GIF)
