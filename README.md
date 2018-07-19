@@ -1,4 +1,4 @@
-# sample-swift-wkwebview-javascript-bridge-and-scheme
+# sample swift wkwebview javascript bridge and scheme
 [![License](http://img.shields.io/badge/License-MIT-green.svg?style=flat)](https://github.com/clintjang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/LICENSE) [![Swift 4](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://swift.org) 
 
 WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플링했습니다.
@@ -17,7 +17,7 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
 
 # 설명
 ## 결과 이미지
-.. 준비중
+<img width="268" height="480" src="/ImageresultLow.gif">
 
 ## 1. javascirpt bridge 방식
 > 브릿지 연결을 이용한 것과 정의된 url의 스킴을 이용한 웹에서 네이티브로 콜백을 주는 구분이 있습니다. 
@@ -29,15 +29,16 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <script type="text/javascript">
-    // alert(1)
-    
-    function callNative01() {
-        try {
-            webkit.messageHandlers.callbackHandler.postMessage("callNative01");
-        } catch(error) {
-            alert(error)
+       // alert(1)
+
+        function callNative01() {
+           try {
+               webkit.messageHandlers.callbackHandler.postMessage("testValue");
+           } catch(error) {
+               alert(error)
+           }
         }
-    }
+
         function callNative02() {
             try {
                 webkit.messageHandlers.callbackHandler.postMessage({key01:'testValue01', key02:'testValue02'});
@@ -45,10 +46,14 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
                 alert(error)
             }
         }
-    
-    function test01() {
-        alert('test01');
-    }
+
+        function test01() {
+           alert('test01');
+        }
+
+        function testCallBack(message) {
+            alert(message);
+        }
     </script>
     <body>
         <h1> <a href="javascript:test01();">Test Click</a> </h1> <br /><br />
@@ -103,15 +108,30 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
     // MARK: - WKScriptMessageHandler
     extension WebViewBridgeViewController : WKScriptMessageHandler {
         //MARK:- HERE!!!
-        func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            print("message.name:\(message.name)")
-            if message.name == Constants.callBackHandlerKey {
-                print("message.body:\(message.body)")
-                
-                // popup!
-                self.webView.stringByEvaluatingJavaScript(script: "javascript:test01();")
-            }
-        }
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+          print("message.name:\(message.name)")
+          if message.name == Constants.callBackHandlerKey {
+              print("message.body:\(message.body)")
+
+              // Just TEST CallBack
+              if let dictionary = message.body as? Dictionary<String, AnyObject> {
+                  print(dictionary)
+                  var popupPrintString = ""
+                  dictionary.forEach { (key, value) in
+                      popupPrintString += "\(key):\(value) "
+                  }
+                  // call back!
+                  self.webView.stringByEvaluatingJavaScript(script: "javascript:testCallBack('\(popupPrintString)');")
+              } else {
+                  // call back!
+                  self.webView.stringByEvaluatingJavaScript(script: "javascript:testCallBack('\(String(describing:message.body))');")
+              }
+
+              // popup!
+  //            self.webView.stringByEvaluatingJavaScript(script: "javascript:test01();")
+
+          }
+      }
     }
 
     .. (중략) ..
@@ -129,11 +149,17 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
 
     <script type="text/javascript">
         //alert(2)
-    function callNative01() {
-        window.location = "nativeScheme://callNative01";
-    }
+
+       function callNative01() {
+           window.location = "nativeScheme://testHost";
+       }
+
         function test02() {
             alert('test02');
+        }
+
+        function testCallBack(message) {
+            alert(message);
         }
     </script>
     <body>
@@ -193,20 +219,23 @@ WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플�
     //MARK:- HERE!!!
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         print("\(#function)")
-        
-        // WebView Native 연동 여부 확인
+
+        // Check whether WebView Native is linked
         if let url = navigationAction.request.url,
             let urlScheme = url.scheme,
             let urlHost = url.host,
             urlScheme.uppercased() == Constants.schemeKey.uppercased() {
             print("url:\(url)")
-            print("urlScheme:\(urlScheme), Lower case.") // 소문자입니다.
+            print("urlScheme:\(urlScheme)")
             print("urlHost:\(urlHost)")
 
             decisionHandler(.cancel)
-            
+
+            // call back!
+            self.webView.stringByEvaluatingJavaScript(script: "javascript:testCallBack('\(urlHost)');")
+
             // popup!
-            self.webView.stringByEvaluatingJavaScript(script: "javascript:test02();")
+  //            self.webView.stringByEvaluatingJavaScript(script: "javascript:test02();")
             return
         }
         decisionHandler(.allow)
