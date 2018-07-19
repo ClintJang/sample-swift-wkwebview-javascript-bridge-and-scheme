@@ -1,19 +1,20 @@
 # sample swift wkwebview javascript bridge and scheme
 [![License](http://img.shields.io/badge/License-MIT-green.svg?style=flat)](https://github.com/clintjang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/LICENSE) [![Swift 4](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://swift.org) 
 
+```
 WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플링했습니다.
 
-- 웹(프론트) → 네이티브 <br />
+★ 웹(프론트) → 네이티브
 예전에는 UIWebView에서 연동시 기존에는 URL에 스키마를 정의해서 내려받은 스킴정보를 이용해서 파싱해서 처리했었습니다.
+WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 로직 처리를 할 수 있는 방법이 있습니다. 
 
-    WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 로직 처리를 할 수 있는 방법이 있습니다. 
-
-- 네이티브 → 웹(프론트) <br />
+★ 네이티브 → 웹(프론트)
 웹(프론트) → 네이티브 로 전달방식은 추가된 방식이 있지만, 
-네이티브 → 웹(프론트) 로 전달/처리 방식은 기존에 자바스크립트 함수를 호출하던 1가지([evaluateJavaScript(_:completionHandler:)](https://developer.apple.com/documentation/webkit/wkwebview/1415017-evaluatejavascript)
-) 그대로 입니다.
+네이티브 → 웹(프론트) 로 전달/처리 방식은 기존에 자바스크립트 함수를 호출하던 1가지(evaluatejavascript) 그대로 입니다.
 
 아래는 그 기능들에 대한 셈플링을 해봤습니다. 
+```
+
 
 # 설명
 ## 결과 이미지
