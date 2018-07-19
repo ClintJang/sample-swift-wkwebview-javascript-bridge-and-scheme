@@ -36,8 +36,10 @@ private extension WebViewBridgeViewController {
     func setupView() {
         // Bridge Setting
         let userController: WKUserContentController = WKUserContentController()
-        let userScript: WKUserScript = WKUserScript(source: "test01()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
-        userController.addUserScript(userScript)
+        
+        // Script injection test at startup
+//        let userScript: WKUserScript = WKUserScript(source: "test01()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+//        userController.addUserScript(userScript)
         
         userController.add(self, name: Constants.callBackHandlerKey)
         let configuration = WKWebViewConfiguration()
@@ -78,8 +80,23 @@ extension WebViewBridgeViewController : WKScriptMessageHandler {
         if message.name == Constants.callBackHandlerKey {
             print("message.body:\(message.body)")
             
+            // Just TEST CallBack
+            if let dictionary = message.body as? Dictionary<String, AnyObject> {
+                print(dictionary)
+                var popupPrintString = ""
+                dictionary.forEach { (key, value) in
+                    popupPrintString += "\(key):\(value) "
+                }
+                // call back!
+                self.webView.stringByEvaluatingJavaScript(script: "javascript:testCallBack('\(popupPrintString)');")
+            } else {
+                // call back!
+                self.webView.stringByEvaluatingJavaScript(script: "javascript:testCallBack('\(String(describing:message.body))');")
+            }
+            
             // popup!
-            self.webView.stringByEvaluatingJavaScript(script: "javascript:test01();")
+//            self.webView.stringByEvaluatingJavaScript(script: "javascript:test01();")
+            
         }
     }
 }

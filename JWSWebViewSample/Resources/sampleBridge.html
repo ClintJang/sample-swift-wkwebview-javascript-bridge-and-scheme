@@ -5,13 +5,13 @@
 <script type="text/javascript">
    // alert(1)
    
-   function callNative01() {
+    function callNative01() {
        try {
-           webkit.messageHandlers.callbackHandler.postMessage("callNative01");
+           webkit.messageHandlers.callbackHandler.postMessage("testValue");
        } catch(error) {
            alert(error)
        }
-   }
+    }
 
     function callNative02() {
         try {
@@ -21,9 +21,13 @@
         }
     }
    
-   function test01() {
+    function test01() {
        alert('test01');
-   }
+    }
+
+    function testCallBack(message) {
+        alert(message);
+    }
 </script>
 <body>
     <h1> <a href="javascript:test01();">Test Click</a> </h1> <br /><br />

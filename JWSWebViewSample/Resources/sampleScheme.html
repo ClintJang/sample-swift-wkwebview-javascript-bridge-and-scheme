@@ -5,12 +5,17 @@
 
 <script type="text/javascript">
     //alert(2)
+    
    function callNative01() {
-       window.location = "nativeScheme://callNative01";
+       window.location = "nativeScheme://testHost";
    }
 
     function test02() {
         alert('test02');
+    }
+
+    function testCallBack(message) {
+        alert(message);
     }
 </script>
 <body>

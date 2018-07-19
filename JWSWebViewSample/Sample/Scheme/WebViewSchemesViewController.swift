@@ -154,19 +154,22 @@ extension WebViewSchemesViewController : WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         print("\(#function)")
         
-        // WebView Native 연동 여부 확인
+        // Check whether WebView Native is linked
         if let url = navigationAction.request.url,
             let urlScheme = url.scheme,
             let urlHost = url.host,
             urlScheme.uppercased() == Constants.schemeKey.uppercased() {
             print("url:\(url)")
-            print("urlScheme:\(urlScheme), Lower case.") // 소문자입니다.
+            print("urlScheme:\(urlScheme)")
             print("urlHost:\(urlHost)")
 
             decisionHandler(.cancel)
             
+            // call back!
+            self.webView.stringByEvaluatingJavaScript(script: "javascript:testCallBack('\(urlHost)');")
+
             // popup!
-            self.webView.stringByEvaluatingJavaScript(script: "javascript:test02();")
+//            self.webView.stringByEvaluatingJavaScript(script: "javascript:test02();")
             return
         }
         decisionHandler(.allow)
