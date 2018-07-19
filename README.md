@@ -17,7 +17,7 @@ WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 �
 
 
 # 설명
-## 결과 이미지
+## 결과 이미지 (GIF)
 <img width="268" height="480" src="/Image/resultLow.gif">
 
 ## 1. javascirpt bridge 방식
