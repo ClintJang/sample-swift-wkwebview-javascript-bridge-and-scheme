@@ -12,7 +12,7 @@ In WKWebView, there is an additional way to do logic processing with javascript 
 The native-to-web forwarding / processing method is exactly the same as calling the JavaScript function ("evaluatejavascript") as in the existing UIWebView.
 ```
 
-- [README.md](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/README.md) : Korean
+- [README.md](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/README.md) : 한국어 설명
 
 # Info
 ## Result image(GIF)
