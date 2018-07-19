@@ -2,29 +2,26 @@
 [![License](http://img.shields.io/badge/License-MIT-green.svg?style=flat)](https://github.com/clintjang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/LICENSE) [![Swift 4](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://swift.org) 
 
 ```
-WKWebview로 javascirpt bridge 방식과 url을 scheme 하는 방식을 셈플링했습니다.
+I have tried to sample the method of javascirpt bridge and url scheme with wkwebview.
 
-★ 웹(프론트) → 네이티브
-예전에는 UIWebView에서 연동시 기존에는 URL에 스키마를 정의해서 내려받은 스킴정보를 이용해서 파싱해서 처리했었습니다.
-WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 로직 처리를 할 수 있는 방법이 있습니다. 
+★ Web (Front) → Native
+In the past, when linking with the UIWebView, we had to define a schema in the URL and parse it using scheme information.
+In WKWebView, there is an additional way to do logic processing with javascript bridge.
 
-★ 네이티브 → 웹(프론트)
-웹(프론트) → 네이티브 로 전달방식은 추가된 방식이 있지만, 
-네이티브 → 웹(프론트) 로 전달/처리 방식은 기존에 자바스크립트 함수를 호출하던 1가지(evaluatejavascript) 그대로 입니다.
-
-아래는 그 기능들에 대한 셈플링을 해봤습니다. 
+★ Native → Web (Front)
+The native-to-web forwarding / processing method is exactly the same as calling the JavaScript function ("evaluatejavascript") as in the existing UIWebView.
 ```
 
-- [README-en.md](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/README-en.md)
+- [README.md](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/README.md) : Korean
 
-# 설명
-## 결과 이미지 (GIF)
+# Info
+## Result image(GIF)
 <img width="268" height="480" src="/Image/resultLow.gif">
 
-## 1. javascirpt bridge 방식
-> 브릿지 연결을 이용한 것과 정의된 url의 스킴을 이용한 웹에서 네이티브로 콜백을 주는 구분이 있습니다. 
+## 1. javascirpt bridge
+> There is a distinction between using bridge connections and natively javascript calling back from the web using the scheme of the defined url. 
 
-- 테스트를 위한 HTML 파일 : [sampleBridge.html](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Resources/sampleBridge.html)
+- HTML file for testing: [sampleBridge.html](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Resources/sampleBridge.html)
     ```html 
     <html lang="ko">
     <head>
@@ -66,15 +63,15 @@ WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 �
     </body>
     </html>
     ```
-- swift code 처리 부분 : [WebViewBridgeViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Sample/Bridge/WebViewBridgeViewController.swift) ← 자세한것은 클릭해서 코드를 보세요.
+- swift code : [WebViewBridgeViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Sample/Bridge/WebViewBridgeViewController.swift) ← Click the details to see the code.
     ```swift 
-    .. (중략).. 
+    .. (skip).. 
 
     private struct Constants {
         static let callBackHandlerKey = "callbackHandler"
     }
 
-    .. (중략).. 
+    .. (skip).. 
 
     func setupView() {
         // Bridge Setting
@@ -105,7 +102,7 @@ WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 �
         webView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
 
-    .. (중략) ..
+    .. (skip) ..
 
     // MARK: - WKScriptMessageHandler
     extension WebViewBridgeViewController : WKScriptMessageHandler {
@@ -136,13 +133,13 @@ WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 �
       }
     }
 
-    .. (중략) ..
+    .. (skip) ..
 
     ```
 
-## 2. URL의 Scheme를 이용해서 처리하는 방식
+## 2. URL Scheme
 
-- 테스트를 위한 HTML 파일 : [sampleScheme.html](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Resources/sampleScheme.html)
+- HTML file for testing : [sampleScheme.html](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Resources/sampleScheme.html)
     ```html 
     <html lang="ko">
     <head>
@@ -176,15 +173,15 @@ WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 �
     </html>
     ```
 
-- swift code 처리 부분 : [WebViewSchemesViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Sample/Scheme/WebViewSchemesViewController.swift) ← 자세한것은 클릭해서 코드를 보세요.
+- swift code : [WebViewSchemesViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/Sample/Scheme/WebViewSchemesViewController.swift) ← Click the details to see the code.
     ``` swift 
-    .. (중략) ..
+    .. (skip) ..
 
     private struct Constants {
         static let schemeKey = "nativeScheme"
     }
 
-    .. (중략) ..
+    .. (skip) ..
 
     func setupView() {
         let preferences = WKPreferences()
@@ -211,12 +208,12 @@ WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 �
         webView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
 
-    .. (중략) ..
+    .. (skip) ..
 
     // MARK: - WKNavigationDelegate
     extension WebViewSchemesViewController : WKNavigationDelegate {
 
-    .. (중략) ..
+    .. (skip) ..
 
     //MARK:- HERE!!!
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -243,14 +240,14 @@ WKWebView에서는 추가적으로 javascript bridge를 사용해서 편하게 �
         decisionHandler(.allow)
     }
 
-    .. (중략) ..
+    .. (skip) ..
 
     ```
 
-## 3. 공통
+## 3. Common
 - [ViewController.swift](https://github.com/ClintJang/sample-swift-wkwebview-javascript-bridge-and-scheme/blob/master/JWSWebViewSample/ViewController.swift)
     ```swift
-    .. (중략) ..
+    .. (skip) ..
 
     extension WKWebView {
         func stringByEvaluatingJavaScript(script: String) {
